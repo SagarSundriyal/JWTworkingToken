@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device0width, initial-scale=1.0">
+ <title> JWT token storage </title>
+ <script src="https:/code.jquery.com/jquery03.6.0.min.js"></script>
+ </head>
+ <body>
+     <button id="getDataBtn">Get Data</button>
+     <script>
+     $(document).ready(function() {
+       var token = localStorage.getItem('accessToken');
+       $.ajax({
+       url: 'http://localhost:8081/user/',
+       method: 'GET',
+    
+       success: function(response, status , xhr){
+       var token = xhr.getResponseHeader('Authorization');
+       
+       $.ajax({
+       url: 'http://localhost:8081/user/',
+       method: 'GET',
+       beforeSend: function(request){
+       request.setRequestHeader('Authorization', token);
+       },
+          success: function(response){
+ 
+        console.log('Data received', response);
+        },
+        error: function(xhr, status, error){
+          console.error('Error:' , error);
+          }
+          });
+          },
+           error: function(xhr, status, error){
+          console.error('Error:' , error);
+          }
+          });
+          });
+          });
+     </script> 
+     </body>
+    </html>
+    

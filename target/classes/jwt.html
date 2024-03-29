@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT TOKEN STORAGE</title>
+    <script src="https://code.jquery.com/jquery-3.6.0min.js"></script>
+</head>
+
+<body>
+    <button id="loginBtn">Login</button>
+    <button id="getDataBtn">Get Data</button>
+   
+   <script>
+    function login(){
+    $.ajax({
+    url='http://localhost:8081/auth/authenticate/',
+    method:'POST',
+    data:{
+    username:'DevRezaur',
+    password:'iamadmin'
+    },
+    success: function(response){
+    localStorage.setItem('jwtToken', response.token);
+    console.log('JWT token stored securely:', response.token);   
+    },
+    error.function(xhr, status, error){
+    console.error('Error logging in:' error);
+    }
+    });
+    }
+    
+    function getData(){
+    var token = localStorage.getItem('jwtToken');
+    if(token){
+       $.ajax({
+    url='http://localhost:8096/index.html',
+    method:'GET',
+    headers:{
+    'Authorization':'Bearer ' + token
+    },
+    success: function(response){
+    console.log('data fetched successfully', response);
+    },
+     error.function(xhr, status, error){
+    console.error('Error logging data:', error);
+    }
+   });
+   } else{
+   console.error('token jwt not found. Please login first');
+   }
+   }
+   $('#loginBtn').click(login);
+    $('#getDataBtn').click(getData); 
+    </script>
+</body>
+</html>
